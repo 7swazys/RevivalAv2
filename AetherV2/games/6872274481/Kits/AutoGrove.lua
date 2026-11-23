@@ -1,0 +1,33 @@
+run(function()
+
+	local util = vape.Libraries.bedwarsutil
+	local AutoGrove
+	local Delay
+	local nextWater = 0
+
+	AutoGrove = kits:CreateModule({
+		Name = 'AutoGrove',
+		Function = function(callback)
+			if callback then
+				nextWater = 0
+
+				repeat
+					if entitylib.isAlive and store.equippedKit == 'spirit_gardener' and tick() >= nextWater and bedwars.AbilityController:canUseAbility('spirit_gardener_water', {disableBlockedAbilityAlert = true}) then
+						nextWater = tick() + Delay.Value
+						bedwars.AbilityController:useAbility('spirit_gardener_water')
+					end
+					task.wait(0.1)
+				until not AutoGrove.Enabled
+			end
+		end,
+		Tooltip = 'Keeps your flowers fed with spirit energy'
+	})
+	Delay = AutoGrove:CreateSlider({
+		Name = 'Delay',
+		Min = 0.5,
+		Max = 20,
+		Default = 3,
+		Decimal = 10,
+		Suffix = util.Seconds
+	})
+end)

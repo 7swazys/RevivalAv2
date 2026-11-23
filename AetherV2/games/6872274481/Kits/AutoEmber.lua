@@ -1,0 +1,57 @@
+run(function()
+
+	local util = vape.Libraries.bedwarsutil
+	local AutoEmber
+	local Targets
+	local Range
+	local Delay
+	local Limit
+
+	AutoEmber = kits:CreateModule({
+		Name = 'AutoEmber',
+		Function = function(call)
+			if call then
+				local clock = os.clock()
+
+				repeat
+					local item = entitylib.isAlive and getItem('infernal_saber')
+					local tool = item and item.tool
+					if tool and (not Limit.Enabled or store.hand.tool == tool) and (Delay.Value <= 0 or os.clock() - clock >= Delay.Value) and entitylib.EntityPosition({
+						Range = Range.Value,
+						Players = Targets.Players.Enabled,
+						Priority = Targets.Priority and Targets.Priority.Value,
+						NPCs = Targets.NPCs.Enabled
+					}) then
+						bedwars.Handler:Get('HellBladeRelease'):Fire('SendToServer', {
+							chargeTime = 1,
+							weapon = tool,
+							player = lplr
+						})
+						clock = os.clock()
+					end
+					task.wait()
+				until not AutoEmber.Enabled
+			end
+		end,
+		Tooltip = 'Releases the saber charge when a target is in range'
+	})
+	Targets = AutoEmber:CreateTargets({
+		Players = true,
+		NPCs = false
+	})
+	Delay = AutoEmber:CreateSlider({
+		Name = 'Delay',
+		Min = 0,
+		Max = 1,
+		Default = 0.1,
+		Decimal = 100
+	})
+	Range = AutoEmber:CreateSlider({
+		Name = 'Range',
+		Min = 1,
+		Max = 22,
+		Default = 22,
+		Suffix = util.Studs
+	})
+	Limit = AutoEmber:CreateToggle({Name = 'Limit to item'})
+end)
