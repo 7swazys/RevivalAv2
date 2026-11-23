@@ -1,0 +1,45 @@
+{
+	"added": [],
+	"updated": [
+		"ServerHop",
+		"AutoRejoin",
+		"SilentAim"
+	],
+	"newModules": [],
+	"updatedModules": [
+		"ServerHop",
+		"AutoRejoin",
+		"SilentAim"
+	],
+	"brokenModules": [],
+	"premiumModules": [],
+	"removedModules": [],
+	"text": "[UNIVERSAL]\n[^] ServerHop and AutoRejoin have a Mode: Least Players, Most Players, Lowest Ping, Highest FPS or Random; it replaces Sort\n[^] ServerHop has Skip visited servers, on by default, so it never picks a server you already left\n[!] ServerHop and AutoRejoin no longer start two server searches at once\n[BEDWARS]\n[!] SilentAim no longer makes the game a little slower with every reinject\n[GENERAL]\n[+] AetherV2 Premium: put your key in the loader line with Key = '...' to load v4, locked to one Roblox account and one device; keys are sold on aetherv2.xyz\n[^] A few large modules are fetched on every launch instead of being saved on your computer\n[GUI]\n[^] Module lists and settings are built the first time you open them, which shortens loading",
+	"games": {
+		"universal": {
+			"newModules": [],
+			"updatedModules": [
+				"ServerHop",
+				"AutoRejoin"
+			],
+			"brokenModules": []
+		},
+		"bedwars": {
+			"newModules": [],
+			"updatedModules": [
+				"SilentAim"
+			],
+			"brokenModules": []
+		},
+		"skywars": {
+			"newModules": [],
+			"updatedModules": [],
+			"brokenModules": []
+		},
+		"bedfight": {
+			"newModules": [],
+			"updatedModules": [],
+			"brokenModules": []
+		}
+	}
+}

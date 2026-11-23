@@ -1,0 +1,86 @@
+run(function()
+
+	local util = vape.Libraries.bedwarsutil
+	local AutoNazar
+	local Consume
+	local Health
+	local Force
+	local Empower
+	local Range
+	local empowered = false
+
+	AutoNazar = kits:CreateModule({
+		Name = 'AutoNazar',
+		Function = function(callback)
+			if callback then
+				empowered = false
+				AutoNazar:Clean(lplr.CharacterAdded:Connect(function()
+					empowered = false
+				end))
+
+				repeat
+					if entitylib.isAlive and store.equippedKit == 'nazar' then
+						local character = entitylib.character
+						local lifeForce = lplr:GetAttribute('LifeForce') or 0
+
+						if Consume.Enabled and lifeForce >= Force.Value and (character.Health / character.MaxHealth) <= (Health.Value / 100) and bedwars.AbilityController:canUseAbility('consume_life_foce', {disableBlockedAbilityAlert = true}) then
+							bedwars.AbilityController:useAbility('consume_life_foce')
+						end
+
+						if Empower.Enabled then
+							local wanted = entitylib.EntityPosition({
+								Origin = character.RootPart.Position,
+								Range = Range.Value,
+								Part = 'RootPart',
+								Players = true
+							}) and true or false
+							if wanted ~= empowered then
+								local ability = wanted and 'enable_life_force_attack' or 'disable_life_force_attack'
+								if bedwars.AbilityController:canUseAbility(ability, {disableBlockedAbilityAlert = true}) then
+									bedwars.AbilityController:useAbility(ability)
+									empowered = wanted
+								end
+							end
+						end
+					end
+					task.wait(0.1)
+				until not AutoNazar.Enabled
+			end
+		end,
+		Tooltip = 'Spends life force to heal and empower attacks'
+	})
+	Consume = AutoNazar:CreateGroup({
+		Name = 'Consume life force',
+		Default = true,
+		Tooltip = 'Converts stored life force into health when hurt'
+	})
+	Health = Consume:CreateSlider({
+		Name = 'Health',
+		Min = 1,
+		Max = 100,
+		Default = 70,
+		Suffix = function()
+			return '%'
+		end,
+		Tooltip = 'Consumes once your health drops below this'
+	})
+	Force = Consume:CreateSlider({
+		Name = 'Life force',
+		Min = 1,
+		Max = 150,
+		Default = 35,
+		Tooltip = 'Life force needed before consuming'
+	})
+	Empower = AutoNazar:CreateGroup({
+		Name = 'Empower attacks',
+		Default = true,
+		Tooltip = 'Enables empowered attacks while an enemy is close and disables them after'
+	})
+	Range = Empower:CreateSlider({
+		Name = 'Range',
+		Min = 1,
+		Max = 60,
+		Default = 25,
+		Suffix = util.Studs
+	})
+end)
